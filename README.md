@@ -24,12 +24,8 @@ To Get started with the project, you need to have the following done first:
   2. Setup golang environment.
     - Download golang from [here](https://golang.org/dl/).
 
-    <!-- - Setup account and create a `dbConfig.json` under root directory that specifies connections. Template can be found under `/deploy` -->
-
-  2. Application setup
+  3. Application setup
     - Clone the project and copy it under `$GOPATH/`. Usually `$GOPATH` is defined when you install golang. By default it is `/Users/<your-user-name>/go/src` for macOS. If you want to change your workspace, you might need to set `$GOPATH` environment variable. See [here](https://github.com/golang/go/wiki/SettingGOPATH).
-
-    <!-- - Create a `httpConfig.json` under root directory that specifies server domain and port number. Template can be found under `/deploy`. You may set host to `localhost` and port number to be `8080`. -->
 
     - Ensure dependency: use `brew` to install `dep`:
       ```
@@ -44,9 +40,3 @@ To Get started with the project, you need to have the following done first:
       $ dep ensure
       $ dep ensure -update
       ```
-
-    <!-- - Then you can start server by running
-
-      ```
-      $ go run main.go
-      ``` -->
