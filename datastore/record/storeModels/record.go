@@ -1,18 +1,31 @@
 package storeModels
 
-type RecordCreateParams {
+import "time"
+
+type RecordCreateParams struct {
   GroupID     int
+  Date        time.Time
   PayerID     string
   Spliters    []string
   Amount      int
   Description string
+  UpdatedAt   time.Time
+  DeletedAt   time.Time
 }
 
-type RecordUpdateParams {
+type RecordUpdateParams struct {
+  Date        time.Time
   PayerID     string
   Spliters    []string
   Amount      int
-  description string
+  Description string
+  UpdatedAt   time.Time
+  DeletedAt   time.Time
 }
 
-type Record
+type RecordRetrieveParams struct {
+  Type    string
+  HostID  string
+  GuestID string
+  GroupID int
+}
