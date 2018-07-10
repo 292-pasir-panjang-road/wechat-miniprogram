@@ -24,8 +24,17 @@ type RecordUpdateParams struct {
 }
 
 type RecordRetrieveParams struct {
-  Type    string
   HostID  string
   GuestID string
   GroupID int
+}
+
+type RecordRetrieveResult struct {
+  RecordID    int
+  GroupID     int
+  Date        time.Time
+  Payer       string
+  Spliters    []string
+  Amount      int
+  Description string
 }

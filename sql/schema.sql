@@ -28,8 +28,8 @@ CREATE TABLE Record (
   spliters    varchar[],
   pay_amount  int NOT NULL,
   description text NOT NULL,
-  updated_at  timestamp
-  deleted_at  timestamp
+  updated_at  timestamp,
+  deleted_at  timestamp,
   FOREIGN KEY (g_id) REFERENCES MGroup(id) ON DELETE CASCADE,
   FOREIGN KEY (payer) REFERENCES MUser(w_id) ON DELETE CASCADE,
   PRIMARY KEY (id, g_id)
@@ -40,7 +40,7 @@ CREATE TABLE OpHistory (
   u_id       varchar(255) NOT NULL,
   g_id       int,
   message    text NOT NULL,
-  created_at timestamp
+  created_at timestamp,
   FOREIGN KEY (u_id) REFERENCES MUser(w_id) ON DELETE CASCADE,
   FOREIGN KEY (g_id) REFERENCES MGroup(id) ON DELETE CASCADE,
   PRIMARY KEY (id, u_id, g_id)
