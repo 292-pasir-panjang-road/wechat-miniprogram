@@ -1,12 +1,12 @@
 package user
 
 import (
-  mDB             "mediocris/utils/database"
-  mStore          "mediocris/datastore"
-  converter       "mediocris/datastore/helper"
-  userStoreModels "mediocris/datastore/user/storeModels"
-  userDBModels    "mediocris/utils/database/dbModels"
-  storeErr        "mediocris/datastore/error"
+  mDB             "wechat-miniprogram/utils/database"
+  mStore          "wechat-miniprogram/datastore"
+  converter       "wechat-miniprogram/datastore/helper"
+  userStoreModels "wechat-miniprogram/datastore/user/storeModels"
+  userDBModels    "wechat-miniprogram/utils/database/dbModels"
+  storeErr        "wechat-miniprogram/datastore/error"
 )
 
 // Defines related SQL queries

@@ -1,27 +1,27 @@
 package helper
 
 import (
-  storeErr          "mediocris/datastore/error"
+  storeErr                "wechat-miniprogram/datastore/error"
 
-  serviceModels     "mediocris/services/serviceModels"
+  detailInfoServiceModels "wechat-miniprogram/services/detailInfo/serviceModels"
 
-  userStoreModels   "mediocris/datastore/user/storeModels"
-  recordStoreModels "mediocris/datastore/record/storeModels"
-  userDBModels      "mediocris/utils/database/dbModels/user"
-  recordDBModels    "mediocris/utils/database/dbModels/record"
+  userStoreModels         "wechat-miniprogram/datastore/user/storeModels"
+  recordStoreModels       "wechat-miniprogram/datastore/record/storeModels"
+  userDBModels            "wechat-miniprogram/utils/database/dbModels/user"
+  recordDBModels          "wechat-miniprogram/utils/database/dbModels/record"
 )
 
 func ServiceToStore(serviceModel interface{}) (interface{}, error) {
   switch serviceModel.(type) {
-  case serviceModels.RecordRetrieveParams:
-    recordRetrieval := serviceModel.(serviceModels.RecordRetrieveParams)
+  case detailInfoServiceModels.DetailRetrieveParams:
+    recordRetrieval := serviceModel.(detailInfoServiceModels.DetailRetrieveParams)
     return recordRetrieveServiceToStore(recordRetrieval), nil
   default:
     return nil, storeErr.ErrUnrecognizedServiceModel
   }
 }
 
-func recordRetrieveServiceToStore(serviceModel serviceModels.RecordRetrieveParams) recordStoreModels.RecordRetrieveParams {
+func recordRetrieveServiceToStore(serviceModel detailInfoServiceModels.DetailRetrieveParams) recordStoreModels.RecordRetrieveParams {
   return recordStoreModels.RecordRetrieveParams{
     HostID:  serviceModel.HostID,
     GuestID: serviceModel.GuestID,

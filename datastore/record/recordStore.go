@@ -1,12 +1,12 @@
 package record
 
 import (
-  mDB               "mediocris/utils/database"
-  mStore            "mediocris/datastore"
-  helper            "mediocris/datastore/helper"
-  recordStoreModels "mediocris/datastore/record/storeModels"
-  recordDBModels    "mediocris/utils/database/dbModels"
-  storeErr          "mediocris/datastore/error"
+  mDB               "wechat-miniprogram/utils/database"
+  mStore            "wechat-miniprogram/datastore"
+  helper            "wechat-miniprogram/datastore/helper"
+  recordStoreModels "wechat-miniprogram/datastore/record/storeModels"
+  recordDBModels    "wechat-miniprogram/utils/database/dbModels"
+  storeErr          "wechat-miniprogram/datastore/error"
 )
 
 const (

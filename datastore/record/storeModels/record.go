@@ -7,7 +7,7 @@ type RecordCreateParams struct {
   Date        time.Time
   PayerID     string
   Spliters    []string
-  Amount      int
+  Amount      float32
   Description string
   UpdatedAt   time.Time
   DeletedAt   time.Time
@@ -17,7 +17,7 @@ type RecordUpdateParams struct {
   Date        time.Time
   PayerID     string
   Spliters    []string
-  Amount      int
+  Amount      float32
   Description string
   UpdatedAt   time.Time
   DeletedAt   time.Time
@@ -35,6 +35,6 @@ type RecordRetrieveResult struct {
   Date        time.Time
   Payer       string
   Spliters    []string
-  Amount      int
+  Amount      float32
   Description string
 }
