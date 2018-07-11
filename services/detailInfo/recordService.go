@@ -12,15 +12,25 @@ import (
   "wechat-miniprogram/services/helper"
 )
 
+// Service for Detailed info
+// Used for two situations:
+// 1. records page between users
+// 2. records page inside a group
 type DetailInfoService struct {
   GroupStore  datastore.Store
   RecordStore datastore.Store
 }
 
+// Constructor
 func NewDetailInfoService(groupStore datastore.Store, recordStore datastore.Store) services.Service {
   return DetailInfoService{groupStore, recordStore}
 }
 
+// Retrieves detailed infos
+// compulsary param: host_id
+// possible params:
+// - guest_id
+// - group_id
 func (s DetailInfoService) Retrieve(_ context.Context, args interface{}) (interface{}, error) {
   infoRetrieveParams, ok := args.(serviceModels.detailInfoServiceModels)
   if !ok {

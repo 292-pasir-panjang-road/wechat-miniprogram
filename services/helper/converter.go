@@ -1,6 +1,8 @@
 package converter
 
 import (
+  "encoding/json"
+
   recordStoreModels   "wechat-miniprogram/datastore/record/storeModels"
   recordServiceModels "wechat-miniprogram/services/record/storeModels"
 )
@@ -34,4 +36,9 @@ func GenerateDetailBetweenUsers(records []*recordStoreModels.RecordRetrieveResul
 
 func GenerateGroupDetails(records []*recordStoreModels.RecordRetrieveResult) (*recordServiceModels.GroupDetails, error) {
   return nil, nil
+}
+
+func ObjToString(object interface{}) string {
+  objBytes, _ := json.Marshal(object)
+  return string(objBytes)
 }
