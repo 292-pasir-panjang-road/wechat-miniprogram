@@ -1,10 +1,10 @@
 package serviceModels
 
 type GroupMembersRetrieveParams struct {
-  GroupID int
+	GroupID int
 }
 
 type GroupRetrieveParams struct {
-  HostID  int
-  GroupID int
+	HostID  int
+	GroupID int
 }

@@ -1,22 +1,22 @@
 package responses
 
 type ErrorResponse struct {
-  Status  int      `json:"-"`
-  Message string   `json:"error"`
-  Details []string `json:"details"`
+	Status  int      `json:"-"`
+	Message string   `json:"error"`
+	Details []string `json:"details"`
 }
 
-const {
-  STATUS_INVALID           = 400
-  STATUS_PERMISSION_DENIED = 401
-  STATUS_NOTFOUND          = 404
-  STATUS_INERNAL_ERROR     = 500
+const (
+	STATUS_INVALID           = 400
+	STATUS_PERMISSION_DENIED = 401
+	STATUS_NOTFOUND          = 404
+	STATUS_INERNAL_ERROR     = 500
 
-  MESSAGE_ACCESS_DENIED    = "access denied"
-  MESSAGE_NOT_FOUND        = "not found"
-  MESSAGE_UNAUTHORIZED     = "unauthorized"
-  MESSAGE_INTERNAL_ERROR   = "internal server error"
-}
+	MESSAGE_ACCESS_DENIED  = "access denied"
+	MESSAGE_NOT_FOUND      = "not found"
+	MESSAGE_UNAUTHORIZED   = "unauthorized"
+	MESSAGE_INTERNAL_ERROR = "internal server error"
+)
 
 // Invalid creates an ErrorResponse for an invalid request.
 func Invalid(message string, details []string) ErrorResponse {
