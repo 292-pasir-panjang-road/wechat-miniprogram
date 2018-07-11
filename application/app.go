@@ -43,6 +43,7 @@ const (
   HTTP_HEADER_BREAK   = ";"
 
   MESSAGE_LISTEN_ADDR = "http listening on "
+  MESSAGE_HALTING     = "halting!"
 )
 
 type App struct {
