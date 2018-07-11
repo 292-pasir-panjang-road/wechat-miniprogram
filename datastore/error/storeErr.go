@@ -2,6 +2,7 @@ package error
 
 import (
   "errors"
+  "database/sql"
 )
 
 var (
@@ -12,4 +13,14 @@ var (
   ErrDBRetrievalError         = errors.New("Failed to retrieve from db.")
   ErrInvalidQuery             = errors.New("Query not valid.")
   ErrNotSupportedQuery        = errors.New("Query not supported yet.")
+  ErrNotFound                 = errors.New("Not found.")
 )
+
+func ErrorWrapper(err error) error {
+  switch {
+  case err == sql.ErrNoRows:
+    return ErrNotFound
+  default:
+    return ErrDBRetrievalError
+  }
+}

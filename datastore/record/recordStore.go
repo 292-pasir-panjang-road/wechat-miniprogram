@@ -85,7 +85,7 @@ func retrieveIndividualRecords(db mDB.Database, userID string) ([]*storeModels.R
   var dbResult []recordDBModels.TansRecord
   err := db.SelectMany(&dbResult, SQL_SELECT_RECORD+SQL_WHERE_USER_RELATED, userID)
   if err != nil {
-    return nil, storeErr.ErrDBRetrievalError
+    return nil, storeErr.ErrorWrapper(err)
   }
   return helper.DBRecordsToStore(dbResult), nil
 }
@@ -95,8 +95,8 @@ func retrieveIndividualRecords(db mDB.Database, userID string) ([]*storeModels.R
 func retrieveInGroupRecords(db mDB.Database, userID string, groupID int) ([]*storeModels.RecordRetrieveResult, error) {
   var dbResult []recordDBModels.TansRecord
   err := db.SelectMany(&dbResult, SQL_SELECT_RECORD+SQL_WHERE_GROUP_RELATED, userID, groupID)
-  if err != nil {
-    return nil, storeErr.ErrDBRetrievalError
+  if err != nil && err ==  {
+    return nil, storeErr.ErrorWrapper(err)
   }
   return helper.DBRecordsToStore(dbResult), nil
 }
@@ -107,7 +107,7 @@ func retrieveBetweenUserRecords(db mDB.Database, hostID string, guestID int) ([]
   var dbResult []recordDBModels.TansRecord
   err := db.SelectMany(&dbResult, SQL_SELECT_RECORD+SQL_WHERE_BETWEEN_USERS, hostID, guestID)
   if err != nil {
-    return nil, storeErr.ErrDBRetrievalError
+    return nil, storeErr.ErrorWrapper(err)
   }
   return helper.DBRecordsToStore(dbResult), nil
 }

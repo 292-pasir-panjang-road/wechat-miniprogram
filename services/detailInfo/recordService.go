@@ -17,13 +17,13 @@ import (
 // 1. records page between users
 // 2. records page inside a group
 type DetailInfoService struct {
-  GroupStore  datastore.Store
+  // GroupStore  datastore.Store
   RecordStore datastore.Store
 }
 
 // Constructor
-func NewDetailInfoService(groupStore datastore.Store, recordStore datastore.Store) services.Service {
-  return DetailInfoService{groupStore, recordStore}
+func NewDetailInfoService(recordStore datastore.Store) services.Service {
+  return DetailInfoService{recordStore}
 }
 
 // Retrieves detailed infos
