@@ -79,6 +79,10 @@ func (s RecordStore) Delete(id string, args interface{}) (interface{}, error) {
   return nil, nil
 }
 
+// ================
+// Helper functions
+// ================
+
 // Retrieves records that are related to a specific individual
 // Returns an array of references to the records
 func retrieveIndividualRecords(db mDB.Database, userID string) ([]*storeModels.RecordRetrieveResult, error) {
