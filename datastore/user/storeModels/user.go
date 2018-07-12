@@ -1,9 +1,9 @@
 package storeModels
 
 type CreateParams struct {
-  wechatID string
+	wechatID string
 }
 
 type UserRecord struct {
-  wechatID string
+	wechatID string
 }

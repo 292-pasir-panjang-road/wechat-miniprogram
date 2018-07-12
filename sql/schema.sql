@@ -1,4 +1,4 @@
-CREATE DATABASE mediocris;
+CREATE DATABASE wechat-miniprogram;
 
 CREATE TABLE MUser (
   id        SERIAL,
@@ -26,7 +26,7 @@ CREATE TABLE Record (
   day         date NOT NULL,
   payer       varchar(255) NOT NULL,
   spliters    varchar[],
-  pay_amount  int NOT NULL,
+  pay_amount  float NOT NULL,
   description text NOT NULL,
   updated_at  timestamp,
   deleted_at  timestamp,
