@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-type Config struct {
+type ServerConfig struct {
 	API    apiConfig    `json:"api"`
 	Server serverConfig `json:"server"`
 }
@@ -29,13 +29,13 @@ func (c *serverConfig) ListenAddress() string {
 }
 
 // ReadConfig loads the application's configuration from a JSON file at the given path.
-func ReadConfig(path string) (*Config, error) {
+func ReadConfig(path string) (*ServerConfig, error) {
 	raw, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
 
-	var config Config
+	var config ServerConfig
 	err = json.Unmarshal(raw, &config)
 	if err != nil {
 		return nil, err

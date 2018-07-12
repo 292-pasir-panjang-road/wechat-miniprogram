@@ -1,6 +1,7 @@
 package application
 
 import (
+	"os"
 	"context"
 	"encoding/json"
 	"net/http"
@@ -9,13 +10,11 @@ import (
 	gokitHttp "github.com/go-kit/kit/transport/http"
 	mux "github.com/gorilla/mux"
 
-	services "wechat-miniprogram/services"
 	endpoints "wechat-miniprogram/services/endpoints"
 	database "wechat-miniprogram/utils/database"
 	healthcheck "wechat-miniprogram/utils/healthcheck"
 	responses "wechat-miniprogram/utils/responses"
 	server "wechat-miniprogram/utils/server"
-	urlUtils "wechat-miniprogram/utils/urlUtils"
 
 	storeErr "wechat-miniprogram/datastore/error"
 	serviceErr "wechat-miniprogram/services/errors"
@@ -32,6 +31,7 @@ const (
 	LOG_LAYER_TAG     = "layer"
 	LOG_ROUTE_TAG     = "route"
 	LOG_MESSAGE_TAG   = "message"
+	LOG_ERROR_TAG			= "error"
 
 	LAYER_APPLICATION = "application"
 	LAYER_ENDPOINT    = "endpoint"
@@ -69,17 +69,18 @@ func (a *App) InitApp(dbConfig database.DBConfig, serverConfig server.ServerConf
 	if err != nil {
 		return err
 	}
+	return nil
 }
 
 func (a *App) initLoggers() {
-	baseLogger := gokitLog.NewLogfmtLogger(log.NewSyncWriter(os.Stderr))
-	a.Logger = log.With(baseLogger,
-		LOG_TIMESTAMP_TAG, log.DefaultTimestampUTC,
-		LOG_CALLER_TAG, log.DefaultCaller,
+	baseLogger := gokitLog.NewLogfmtLogger(gokitLog.NewSyncWriter(os.Stderr))
+	a.Logger = gokitLog.With(baseLogger,
+		LOG_TIMESTAMP_TAG, gokitLog.DefaultTimestampUTC,
+		LOG_CALLER_TAG, gokitLog.DefaultCaller,
 	)
-	a.AppLogger = log.With(a.Logger, LOG_LAYER_TAG, LAYER_APPLICATION)
-	a.EndpointLogger = log.With(a.Logger, LOG_LAYER_TAG, LAYER_ENDPOINT)
-	a.TransportLogger = log.With(a.Logger, LOG_LAYER_TAG, LAYER_TRANSPORT)
+	a.AppLogger = gokitLog.With(a.Logger, LOG_LAYER_TAG, LAYER_APPLICATION)
+	a.EndpointLogger = gokitLog.With(a.Logger, LOG_LAYER_TAG, LAYER_ENDPOINT)
+	a.TransportLogger = gokitLog.With(a.Logger, LOG_LAYER_TAG, LAYER_TRANSPORT)
 }
 
 func (a *App) initDB(dbConfig database.DBConfig) error {
@@ -88,6 +89,7 @@ func (a *App) initDB(dbConfig database.DBConfig) error {
 		return err
 	}
 	a.DB = db
+	return nil
 }
 
 func (a *App) initHeartbeat() {
@@ -95,15 +97,15 @@ func (a *App) initHeartbeat() {
 }
 
 func (a *App) initDetailInfoHandler() {
-	recordStore := recordStore.NewRecordStore(d.DB)
+	recordStore := recordStore.NewRecordStore(a.DB)
 	detailInfoService := detailInfoService.NewDetailInfoService(recordStore)
 
 	a.Router.Methods("GET").Path("/records/user/{host_id}/{guest_id}").Handler(gokitHttp.NewServer(
-		endpoints.MakeRetrieveEndpoint(a.EndpointLogger, detailInfoService, endpoint.SERVICE_DETAIL_INFO_RETRIEVE),
+		endpoints.MakeRetrieveEndpoint(a.EndpointLogger, detailInfoService, endpoints.SERVICE_DETAIL_INFO_RETRIEVE),
 		detailInfoHttp.DecodeRetrieveRequest,
 		encodeJSONResponse,
 		a.ErrorEncoder,
-		gokitHttp.ServerErrorLogger(log.With(a.TransportLogger, LOG_ROUTE_TAG, "Retrieve"))))
+		gokitHttp.ServerErrorLogger(gokitLog.With(a.TransportLogger, LOG_ROUTE_TAG, "Retrieve"))))
 }
 
 func (a *App) Run() {
@@ -124,7 +126,7 @@ func errorHandler(_ context.Context, err error, w http.ResponseWriter) {
 	w.Header().Set(HTTP_HEADER_CONTENT, HTTP_CONTENT_JSON+HTTP_HEADER_BREAK+HTTP_CONTENT_UTF8)
 	var response responses.ErrorResponse
 
-	switch expression {
+	switch {
 	case err == storeErr.ErrInvalidQuery || err == storeErr.ErrNotSupportedQuery:
 		response = responses.Invalid(err.Error(), nil)
 	case err == serviceErr.ErrIncorrectParamsFormat || err == serviceErr.ErrInsufficientParams:
@@ -136,7 +138,7 @@ func errorHandler(_ context.Context, err error, w http.ResponseWriter) {
 	}
 
 	w.WriteHeader(response.Status)
-	json.NewDecoder(w).Encode(&response)
+	json.NewEncoder(w).Encode(&response)
 }
 
 func encodeJSONResponse(_ context.Context, writer http.ResponseWriter, response interface{}) error {

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 
 	recordStoreModels "wechat-miniprogram/datastore/record/storeModels"
-	recordServiceModels "wechat-miniprogram/services/record/storeModels"
+	recordServiceModels "wechat-miniprogram/services/detailInfo/serviceModels"
 )
 
 func GenerateDetailBetweenUsers(records []*recordStoreModels.RecordRetrieveResult, hostID string, guestID string) (*recordServiceModels.DetailBetweenUsers, error) {
@@ -12,10 +12,10 @@ func GenerateDetailBetweenUsers(records []*recordStoreModels.RecordRetrieveResul
 	for _, record := range records {
 
 		totalAmount := record.Amount
-		trans := totalAmount / len(record.Spliters)
+		trans := totalAmount / float32(len(record.Spliters))
 
 		// Which means that host borrows money from guest. trans need to be negative
-		if record.PayerID != hostID {
+		if record.Payer != hostID {
 			trans = -1 * trans
 		}
 		userRecord := recordServiceModels.UserRecord{

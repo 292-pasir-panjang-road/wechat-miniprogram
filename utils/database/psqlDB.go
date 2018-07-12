@@ -24,7 +24,7 @@ type PsqlDB struct {
 }
 
 // Creates a new psql database (most basic and traditional way)
-func New(config Config) (Database, error) {
+func New(config DBConfig) (Database, error) {
 
 	// Only allows postgres
 	if config.Driver != POSTGRES {
@@ -53,7 +53,7 @@ func New(config Config) (Database, error) {
 }
 
 // Creates a new psql database (for Google App Engine only)
-func NewGAE(config Config) (Database, error) {
+func NewGAE(config DBConfig) (Database, error) {
 
 	// Only allows postgres
 	if config.Driver != POSTGRES {

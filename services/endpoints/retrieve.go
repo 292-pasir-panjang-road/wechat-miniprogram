@@ -24,6 +24,7 @@ func MakeRetrieveEndpoint(logger log.Logger, service services.Service, serviceTy
 	// Returns an endpoint (basically, an enpoint is a place to deal with request)
 	// For here we just pass it to services to do it.
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		var err error
 
 		// Before return, log status
 		defer func(start time.Time) {
@@ -36,6 +37,7 @@ func MakeRetrieveEndpoint(logger log.Logger, service services.Service, serviceTy
 		}(time.Now())
 
 		// Pass job to services
-		return service.Retrieve(request)
+		result, err := service.Retrieve(ctx, request)
+		return result, err
 	}
 }

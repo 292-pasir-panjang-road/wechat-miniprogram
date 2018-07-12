@@ -6,9 +6,9 @@ import (
 	detailInfoServiceModels "wechat-miniprogram/services/detailInfo/serviceModels"
 
 	recordStoreModels "wechat-miniprogram/datastore/record/storeModels"
-	userStoreModels "wechat-miniprogram/datastore/user/storeModels"
+	// userStoreModels "wechat-miniprogram/datastore/user/storeModels"
 	recordDBModels "wechat-miniprogram/utils/database/dbModels/record"
-	userDBModels "wechat-miniprogram/utils/database/dbModels/user"
+	// userDBModels "wechat-miniprogram/utils/database/dbModels/user"
 )
 
 func ServiceToStore(serviceModel interface{}) (interface{}, error) {

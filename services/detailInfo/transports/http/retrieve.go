@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"wechat-miniprogram/services/detailInfo/serviceModels"
-	"wechat-miniprogram/services/errors"
+	serviceErr "wechat-miniprogram/services/errors"
 )
 
 const (
@@ -18,7 +18,7 @@ const (
 )
 
 // Decodes a raw incoming http request to readable object for services
-func DecodeRetrieveRequest(_ conetext.Context, req *http.Request) (interface{}, error) {
+func DecodeRetrieveRequest(_ context.Context, req *http.Request) (interface{}, error) {
 
 	// extracts params from path
 	vars := mux.Vars(req)
@@ -28,7 +28,7 @@ func DecodeRetrieveRequest(_ conetext.Context, req *http.Request) (interface{}, 
 
 	// do not allow empty host id
 	if hostID == EMPTY_ID {
-		return nil, errors.ErrInsufficientParams
+		return nil, serviceErr.ErrInsufficientParams
 	}
 
 	// deal with group id. if no group id provided, sub with -1
@@ -36,7 +36,7 @@ func DecodeRetrieveRequest(_ conetext.Context, req *http.Request) (interface{}, 
 	if groupIDStr == EMPTY_ID {
 		groupID = -1
 	} else {
-		groupID = strconv.Atoi(groupIDStr)
+		groupID, _ = strconv.Atoi(groupIDStr)
 	}
 
 	// returns retrieve params

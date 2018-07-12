@@ -24,7 +24,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	app.InitializeApp(dbConfig, serverConfig)
+	app.InitApp(*dbConfig, *serverConfig)
 	app.Run()
 	app.Logger.Log(
 		application.LOG_LAYER_TAG, application.LAYER_APPLICATION,

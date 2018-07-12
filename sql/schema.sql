@@ -1,4 +1,4 @@
-CREATE DATABASE wechat-miniprogram;
+CREATE DATABASE mediocirs;
 
 CREATE TABLE MUser (
   id        SERIAL,

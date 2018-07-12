@@ -7,8 +7,8 @@ import (
 
 func Join(domain string, paths ...string) string {
 	u, _ := url.Parse(domain)
-	for _, path := range paths {
-		u.Path = path.Join(u.Path, path)
+	for _, pathItem := range paths {
+		u.Path = path.Join(u.Path, pathItem)
 	}
 	return u.String()
 }

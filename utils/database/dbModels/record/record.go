@@ -8,6 +8,6 @@ type TansRecord struct {
 	Date        time.Time `db:"day"`
 	Payer       string    `db:"payer"`
 	Spliters    []string  `db:"spliters"`
-	Amount      int       `db:"pay_amount"`
+	Amount      float32   `db:"pay_amount"`
 	Description string    `db:"description"`
 }

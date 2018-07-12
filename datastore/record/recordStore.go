@@ -6,7 +6,7 @@ import (
 	helper "wechat-miniprogram/datastore/helper"
 	recordStoreModels "wechat-miniprogram/datastore/record/storeModels"
 	mDB "wechat-miniprogram/utils/database"
-	recordDBModels "wechat-miniprogram/utils/database/dbModels"
+	recordDBModels "wechat-miniprogram/utils/database/dbModels/record"
 )
 
 const (
@@ -45,7 +45,7 @@ func (s RecordStore) Retrieve(args interface{}) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	retrieveParams := converted.(storeModels.RecordRetrieveParams)
+	retrieveParams := converted.(recordStoreModels.RecordRetrieveParams)
 
 	if retrieveParams.HostID == NON_USER_ID {
 		return nil, storeErr.ErrInvalidQuery
@@ -53,17 +53,17 @@ func (s RecordStore) Retrieve(args interface{}) (interface{}, error) {
 
 	// When no group and guest id is provided (records for a user)
 	if retrieveParams.GroupID == NON_GROUP_ID && retrieveParams.GuestID == NON_USER_ID {
-		return retrieveIndividualRecords(retrieveParams.HostID)
+		return retrieveIndividualRecords(s.DB, retrieveParams.HostID)
 	}
 
 	// When group specified but no guest id (records for a user in a specific group)
 	if retrieveParams.GroupID != NON_GROUP_ID && retrieveParams.GuestID == NON_USER_ID {
-		return retrieveInGroupRecords(retrieveParams.HostID, retrieveParams.GroupID)
+		return retrieveInGroupRecords(s.DB, retrieveParams.HostID, retrieveParams.GroupID)
 	}
 
 	// When two user ids are specified (records between two specific users)
 	if retrieveParams.GuestID != NON_USER_ID {
-		return retrieveBetweenUserRecords(retrieveParams.HostID, retrieveParams.GuestID)
+		return retrieveBetweenUserRecords(s.DB, retrieveParams.HostID, retrieveParams.GuestID)
 	}
 
 	return nil, storeErr.ErrNotSupportedQuery
@@ -85,7 +85,7 @@ func (s RecordStore) Delete(id string, args interface{}) (interface{}, error) {
 
 // Retrieves records that are related to a specific individual
 // Returns an array of references to the records
-func retrieveIndividualRecords(db mDB.Database, userID string) ([]*storeModels.RecordRetrieveResult, error) {
+func retrieveIndividualRecords(db mDB.Database, userID string) (interface{}, error) {
 	var dbResult []recordDBModels.TansRecord
 	err := db.SelectMany(&dbResult, SQL_SELECT_RECORD+SQL_WHERE_USER_RELATED, userID)
 	if err != nil {
@@ -96,7 +96,7 @@ func retrieveIndividualRecords(db mDB.Database, userID string) ([]*storeModels.R
 
 // Retrieves records that are related to a specific individual in a specific group
 // Returns an array of references to the records
-func retrieveInGroupRecords(db mDB.Database, userID string, groupID int) ([]*storeModels.RecordRetrieveResult, error) {
+func retrieveInGroupRecords(db mDB.Database, userID string, groupID int) (interface{}, error) {
 	var dbResult []recordDBModels.TansRecord
 	err := db.SelectMany(&dbResult, SQL_SELECT_RECORD+SQL_WHERE_GROUP_RELATED, userID, groupID)
 	if err != nil {
@@ -107,7 +107,7 @@ func retrieveInGroupRecords(db mDB.Database, userID string, groupID int) ([]*sto
 
 // Retrieves records that are between two specific users
 // Returns an array of references to the records
-func retrieveBetweenUserRecords(db mDB.Database, hostID string, guestID int) ([]*storeModels.RecordRetrieveResult, error) {
+func retrieveBetweenUserRecords(db mDB.Database, hostID string, guestID string) (interface{}, error) {
 	var dbResult []recordDBModels.TansRecord
 	err := db.SelectMany(&dbResult, SQL_SELECT_RECORD+SQL_WHERE_BETWEEN_USERS, hostID, guestID)
 	if err != nil {
