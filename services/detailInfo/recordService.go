@@ -6,8 +6,8 @@ import (
 	"wechat-miniprogram/datastore"
 	"wechat-miniprogram/services"
 
-	recordStoreModels "wechat-miniprogram/datastore/record/storeModels"
-	"wechat-miniprogram/services/detailInfo/serviceModels"
+	recordStoreModels "wechat-miniprogram/datastore/record/storemodels"
+	"wechat-miniprogram/services/detailInfo/servicemodels"
 
 	serviceErr "wechat-miniprogram/services/errors"
 	"wechat-miniprogram/services/helper"
@@ -33,7 +33,7 @@ func NewDetailInfoService(recordStore datastore.Store) services.Service {
 // - guest_id
 // - group_id
 func (s DetailInfoService) Retrieve(_ context.Context, args interface{}) (interface{}, error) {
-	infoRetrieveParams, ok := args.(serviceModels.DetailRetrieveParams)
+	infoRetrieveParams, ok := args.(servicemodels.DetailRetrieveParams)
 	if !ok {
 		return nil, serviceErr.ErrIncorrectParamsFormat
 	}

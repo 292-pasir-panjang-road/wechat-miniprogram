@@ -3,8 +3,8 @@ package helper
 import (
 	"encoding/json"
 
-	recordStoreModels "wechat-miniprogram/datastore/record/storeModels"
-	recordServiceModels "wechat-miniprogram/services/detailInfo/serviceModels"
+	recordStoreModels "wechat-miniprogram/datastore/record/storemodels"
+	recordServiceModels "wechat-miniprogram/services/detailInfo/servicemodels"
 )
 
 // GenerateDetailBetweenUsers Generates the detailed info between two user

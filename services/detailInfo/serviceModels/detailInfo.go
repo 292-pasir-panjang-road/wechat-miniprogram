@@ -11,14 +11,14 @@ type DetailRetrieveParams struct {
 
 // DetailBetweenUsers wraps the detail info result between users
 type DetailBetweenUsers struct {
-	HostID  string
-	GuestID string
-	Records []*userRecord
+	HostID  string        `json:"host_id"`
+	GuestID string        `json:"guest_id"`
+	Records []*UserRecord `json:"records"`
 }
 
-// userRecord wraps the record used for detail info
+// UserRecord wraps the record used for detail info
 // between users
-type userRecord struct {
+type UserRecord struct {
 	RecordID    int
 	GroupID     int
 	Date        time.Time
@@ -28,16 +28,16 @@ type userRecord struct {
 
 // GroupDetails wraps the detail info result for a group
 type GroupDetails struct {
-	HostID    string
-	GroupID   int
-	GroupName string
-	Members   map[string]string
-	Records   []*groupRecord
+	HostID    string            `json:"host_id"`
+	GroupID   int               `json:"group_id"`
+	GroupName string            `json:"group_name"`
+	Members   map[string]string `json:"members"`
+	Records   []*GroupRecord    `json:"records"`
 }
 
-// groupRecord wraps the record used for detail info
+// GroupRecord wraps the record used for detail info
 // between user and group
-type groupRecord struct {
+type GroupRecord struct {
 	RecordID    int
 	Date        time.Time
 	Amount      float32

@@ -4,7 +4,7 @@ import (
 	mStore "wechat-miniprogram/datastore"
 	storeErr "wechat-miniprogram/datastore/error"
 	converter "wechat-miniprogram/datastore/helper"
-	userStoreModels "wechat-miniprogram/datastore/user/storeModels"
+	userStoreModels "wechat-miniprogram/datastore/user/storemodels"
 	mDB "wechat-miniprogram/utils/database"
 	userDBModels "wechat-miniprogram/utils/database/dbModels/user"
 )

@@ -117,7 +117,7 @@ func (a *App) initDetailInfoHandler() {
 	detailInfoService := detailInfoService.NewDetailInfoService(recordStore)
 
 	a.Router.Methods("GET").Path("/records/user/{host_id}/{guest_id}").Handler(gokitHttp.NewServer(
-		endpoints.MakeRetrieveEndpoint(a.EndpointLogger, detailInfoService, endpoints.SERVICE_DETAIL_INFO_RETRIEVE),
+		endpoints.MakeRetrieveEndpoint(a.EndpointLogger, detailInfoService, endpoints.ServiceDetailInfoRetrieve),
 		detailInfoHttp.DecodeRetrieveRequest,
 		encodeJSONResponse,
 		a.ErrorEncoder,

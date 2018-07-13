@@ -3,10 +3,10 @@ package helper
 import (
 	storeErr "wechat-miniprogram/datastore/error"
 
-	detailInfoServiceModels "wechat-miniprogram/services/detailInfo/serviceModels"
+	detailInfoServiceModels "wechat-miniprogram/services/detailInfo/servicemodels"
 
-	recordStoreModels "wechat-miniprogram/datastore/record/storeModels"
-	userStoreModels "wechat-miniprogram/datastore/user/storeModels"
+	recordStoreModels "wechat-miniprogram/datastore/record/storemodels"
+	userStoreModels "wechat-miniprogram/datastore/user/storemodels"
 	recordDBModels "wechat-miniprogram/utils/database/dbModels/record"
 	userDBModels "wechat-miniprogram/utils/database/dbModels/user"
 )

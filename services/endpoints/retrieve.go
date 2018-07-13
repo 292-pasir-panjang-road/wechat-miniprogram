@@ -12,7 +12,8 @@ import (
 )
 
 const (
-	serviceDetailInfoRetrieve = "detail_info_retrieve"
+	// ServiceDetailInfoRetrieve defines detail info retrieve service type
+	ServiceDetailInfoRetrieve = "detail_info_retrieve"
 
 	logErrorTag    = "error"
 	logTimeTag     = "took"

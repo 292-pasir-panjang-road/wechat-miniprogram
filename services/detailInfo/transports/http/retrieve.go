@@ -7,7 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"wechat-miniprogram/services/detailInfo/serviceModels"
+	"wechat-miniprogram/services/detailInfo/servicemodels"
 	serviceErr "wechat-miniprogram/services/errors"
 )
 
@@ -41,7 +41,7 @@ func DecodeRetrieveRequest(_ context.Context, req *http.Request) (interface{}, e
 	}
 
 	// returns retrieve params
-	return serviceModels.DetailRetrieveParams{
+	return servicemodels.DetailRetrieveParams{
 		HostID:  hostID,
 		GuestID: guestID,
 		GroupID: groupID}, nil
