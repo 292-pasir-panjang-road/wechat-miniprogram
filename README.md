@@ -49,6 +49,11 @@ To Get started with the project, you need to have the following done first:
       ```
       and please adjust your settings accordingly.
 
+    - Run your application! Please run the following command under your application's root directory
+      ```
+      $ go run main.go
+      ```
+
 ### Test your code
 Please remember to test your code after development. testing files can be found inside `tests/`. You can run
 ```
