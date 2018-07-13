@@ -2,23 +2,25 @@ package endpoints
 
 import (
 	"context"
+	"time"
+
 	"github.com/go-kit/kit/endpoint"
 	"github.com/go-kit/kit/log"
-	"time"
 
 	"wechat-miniprogram/services"
 	"wechat-miniprogram/services/helper"
 )
 
 const (
-	SERVICE_DETAIL_INFO_RETRIEVE = "detail_info_retrieve"
+	serviceDetailInfoRetrieve = "detail_info_retrieve"
 
-	LOG_ERROR_TAG    = "error"
-	LOG_TIME_TAG     = "took"
-	LOG_ENDPOINT_TAG = "endpoint"
-	LOG_PARAMS_TAG   = "params"
+	logErrorTag    = "error"
+	logTimeTag     = "took"
+	logEndpointTag = "endpoint"
+	logParamsTag   = "params"
 )
 
+// MakeRetrieveEndpoint makes retrieve endpoint for different types of serviecs
 func MakeRetrieveEndpoint(logger log.Logger, service services.Service, serviceType string) endpoint.Endpoint {
 
 	// Returns an endpoint (basically, an enpoint is a place to deal with request)
@@ -29,10 +31,10 @@ func MakeRetrieveEndpoint(logger log.Logger, service services.Service, serviceTy
 		// Before return, log status
 		defer func(start time.Time) {
 			logger.Log(
-				LOG_ERROR_TAG, err,
-				LOG_TIME_TAG, time.Since(start),
-				LOG_ENDPOINT_TAG, serviceType,
-				LOG_PARAMS_TAG, helper.ObjToString(request),
+				logErrorTag, err,
+				logTimeTag, time.Since(start),
+				logEndpointTag, serviceType,
+				logParamsTag, helper.ObjToString(request),
 			)
 		}(time.Now())
 

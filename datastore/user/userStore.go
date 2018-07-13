@@ -6,7 +6,7 @@ import (
 	converter "wechat-miniprogram/datastore/helper"
 	userStoreModels "wechat-miniprogram/datastore/user/storeModels"
 	mDB "wechat-miniprogram/utils/database"
-	userDBModels "wechat-miniprogram/utils/database/dbModels"
+	userDBModels "wechat-miniprogram/utils/database/dbModels/user"
 )
 
 // Defines related SQL queries
@@ -19,21 +19,21 @@ const (
 	sqlDeleteUserWhere = `DELETE FROM MUser WHERE w_id = $1`
 )
 
-// Defines user store struct
-type UserStore struct {
+// Store defines user store struct
+type Store struct {
 	DB mDB.Database
 }
 
-// Constructor of UserStore
+// NewUserStore is the constructor of Store
 func NewUserStore(db mDB.Database) mStore.Store {
-	return UserStore{db}
+	return Store{db}
 }
 
-// Creates a new user record, return errors if any
-func (s UserStore) Create(args interface{}) (interface{}, error) {
+// Create creates a new user record, return errors if any
+func (s Store) Create(args interface{}) (interface{}, error) {
 
 	// try to user converter to convert service model to store model
-	converted, err := converter.serviceToStore(args)
+	converted, err := converter.ServiceToStore(args)
 	if err != nil {
 		return nil, err
 	}
@@ -45,18 +45,18 @@ func (s UserStore) Create(args interface{}) (interface{}, error) {
 	}
 
 	// execute insertion
-	_, err = s.DB.Exec(sqlInsertUser, casted.wechatID)
+	_, err = s.DB.Exec(sqlInsertUser, casted.WechatID)
 	if err != nil {
 		return nil, err
 	}
 
-	return casted.wechatID, nil
+	return casted.WechatID, nil
 }
 
-// Retrieves users. Since currently it does not make sense getting one user,
+// Retrieve retrieves users. Since currently it does not make sense getting one user,
 // we just assume retrieving all users first
-func (s UserStore) Retrieve(_ interface{}) (interface{}, error) {
-	var dbUsers []*userDBModels.UserAccount
+func (s Store) Retrieve(_ interface{}) (interface{}, error) {
+	var dbUsers []*userDBModels.Account
 	var storeUsers []*userStoreModels.UserRecord
 	err := s.DB.SelectMany(&dbUsers, sqlSelectUser)
 	if err != nil {
@@ -64,18 +64,18 @@ func (s UserStore) Retrieve(_ interface{}) (interface{}, error) {
 	}
 
 	for _, dbUser := range dbUsers {
-		storeUsers = append(storeUsers, converter.dbToStore(dbUser))
+		storeUsers = append(storeUsers, converter.DBUserInfoToStore(*dbUser))
 	}
 	return storeUsers, nil
 }
 
-// Updates a user records. Currently no need for update
-func (s UserStore) Update(_ string, _ interface{}) (interface{}, error) {
+// Update updates a user records. Currently no need for update
+func (s Store) Update(_ string, _ interface{}) (interface{}, error) {
 	return nil, nil
 }
 
-// Deletes a user record.
-func (s UserStore) Delete(id string, _ interface{}) (interface{}, error) {
+// Delete deletes a user record.
+func (s Store) Delete(id string, _ interface{}) (interface{}, error) {
 	_, err := s.DB.Exec(sqlDeleteUserWhere, id)
 	if err != nil {
 		return nil, err

@@ -4,7 +4,7 @@ import (
 	"context"
 )
 
-// This is a general service interface. Since usually services are just one of
+// Service is a general service interface. Since usually services are just one of
 // the kind of CRUD.
 type Service interface {
 	Retrieve(ctx context.Context, args interface{}) (interface{}, error)

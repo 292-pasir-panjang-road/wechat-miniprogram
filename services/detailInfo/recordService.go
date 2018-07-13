@@ -6,14 +6,14 @@ import (
 	"wechat-miniprogram/datastore"
 	"wechat-miniprogram/services"
 
-	"wechat-miniprogram/services/detailInfo/serviceModels"
 	recordStoreModels "wechat-miniprogram/datastore/record/storeModels"
+	"wechat-miniprogram/services/detailInfo/serviceModels"
 
-	"wechat-miniprogram/services/helper"
 	serviceErr "wechat-miniprogram/services/errors"
+	"wechat-miniprogram/services/helper"
 )
 
-// Service for Detailed info
+// DetailInfoService is service for Detailed info
 // Used for two situations:
 // 1. records page between users
 // 2. records page inside a group
@@ -22,12 +22,12 @@ type DetailInfoService struct {
 	RecordStore datastore.Store
 }
 
-// Constructor
+// NewDetailInfoService is the constructor
 func NewDetailInfoService(recordStore datastore.Store) services.Service {
 	return DetailInfoService{recordStore}
 }
 
-// Retrieves detailed infos
+// Retrieve retrieves detailed infos
 // compulsary param: host_id
 // possible params:
 // - guest_id
@@ -48,14 +48,17 @@ func (s DetailInfoService) Retrieve(_ context.Context, args interface{}) (interf
 	return helper.GenerateDetailBetweenUsers(castedRecords, infoRetrieveParams.HostID, infoRetrieveParams.GuestID)
 }
 
+// Create not in used yet
 func (s DetailInfoService) Create(ctx context.Context, args interface{}) (interface{}, error) {
 	return nil, nil
 }
 
+// Update not in used yet
 func (s DetailInfoService) Update(ctx context.Context, args interface{}) (interface{}, error) {
 	return nil, nil
 }
 
+// Delete not in used yet
 func (s DetailInfoService) Delete(ctx context.Context, args interface{}) (interface{}, error) {
 	return nil, nil
 }

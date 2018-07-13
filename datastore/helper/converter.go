@@ -6,11 +6,12 @@ import (
 	detailInfoServiceModels "wechat-miniprogram/services/detailInfo/serviceModels"
 
 	recordStoreModels "wechat-miniprogram/datastore/record/storeModels"
-	// userStoreModels "wechat-miniprogram/datastore/user/storeModels"
+	userStoreModels "wechat-miniprogram/datastore/user/storeModels"
 	recordDBModels "wechat-miniprogram/utils/database/dbModels/record"
-	// userDBModels "wechat-miniprogram/utils/database/dbModels/user"
+	userDBModels "wechat-miniprogram/utils/database/dbModels/user"
 )
 
+// ServiceToStore converts service models to store models
 func ServiceToStore(serviceModel interface{}) (interface{}, error) {
 	switch serviceModel.(type) {
 	case detailInfoServiceModels.DetailRetrieveParams:
@@ -29,6 +30,7 @@ func recordRetrieveServiceToStore(serviceModel detailInfoServiceModels.DetailRet
 	}
 }
 
+// DBRecordsToStore converts db record models to store record models
 func DBRecordsToStore(dbRecords []recordDBModels.TansRecord) []*recordStoreModels.RecordRetrieveResult {
 	result := make([]*recordStoreModels.RecordRetrieveResult, 0)
 	for _, dbRecord := range dbRecords {
@@ -44,4 +46,11 @@ func DBRecordsToStore(dbRecords []recordDBModels.TansRecord) []*recordStoreModel
 		result = append(result, &temp)
 	}
 	return result
+}
+
+// DBUserInfoToStore converts db user models to store user models
+func DBUserInfoToStore(dbUser userDBModels.Account) *userStoreModels.UserRecord {
+	return &userStoreModels.UserRecord{
+		WechatID: dbUser.WechatID,
+	}
 }

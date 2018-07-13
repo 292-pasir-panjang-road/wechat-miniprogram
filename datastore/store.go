@@ -1,6 +1,6 @@
 package datastore
 
-// This is an interface that wraps most common methods of a datastore,
+// Store is an interface that wraps most common methods of a datastore,
 // which are create, retrieve, update and delete
 type Store interface {
 

@@ -4,44 +4,46 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/jmoiron/sqlx"
+
+	// for postgres driver type
 	_ "github.com/lib/pq"
 )
 
 const (
-	POSTGRES         = "postgres"
-	DOES_NOT_SUPPORT = "database: PsqlDB cannot initialize other types of DB."
-
-	CONNECTION_DEFAULT_TEMPLATE = "host=%s port=%s dbname=%s user=%s password='%s'"
-	CONNECTION_GAE_TEMPLATE     = "host=%s dbname=%s user=%s password='%s'"
-	CONNECTION_NO_SSL           = " sslmode=disable"
+	poetgres                  = "postgres"
+	doesNotSupport            = "database: PsqlDB cannot initialize other types of DB."
+	connectionDefaultTemplate = "host=%s port=%s dbname=%s user=%s password='%s'"
+	connectionGAETemplate     = "host=%s dbname=%s user=%s password='%s'"
+	connectionNoSSL           = " sslmode=disable"
 )
 
-// Create a new db struct
+// PsqlDB create a new db struct
 type PsqlDB struct {
 	connection *sqlx.DB
 }
 
-// Creates a new psql database (most basic and traditional way)
+// New Creates a new psql database (most basic and traditional way)
 func New(config DBConfig) (Database, error) {
 
 	// Only allows postgres
-	if config.Driver != POSTGRES {
-		return nil, errors.New(DOES_NOT_SUPPORT)
+	if config.Driver != poetgres {
+		return nil, errors.New(doesNotSupport)
 	}
 
 	// Gets connection string
-	connectionString := fmt.Sprintf(CONNECTION_DEFAULT_TEMPLATE,
-		config.Host, config.Port, config.DBName, config.Username, config.Password,
+	connectionString := fmt.Sprintf(connectionDefaultTemplate,
+		config.Host, strconv.Itoa(config.Port), config.DBName, config.Username, config.Password,
 	)
 
 	if !config.EnableSSL {
-		connectionString += CONNECTION_NO_SSL
+		connectionString += connectionNoSSL
 	}
 
 	// Makes connection
-	connection, err := sqlx.Connect(POSTGRES, connectionString)
+	connection, err := sqlx.Connect(poetgres, connectionString)
 	if err != nil {
 		return nil, err
 	}
@@ -52,24 +54,24 @@ func New(config DBConfig) (Database, error) {
 	return &PsqlDB{connection}, nil
 }
 
-// Creates a new psql database (for Google App Engine only)
+// NewGAE creates a new psql database (for Google App Engine only)
 func NewGAE(config DBConfig) (Database, error) {
 
 	// Only allows postgres
-	if config.Driver != POSTGRES {
-		return nil, errors.New(DOES_NOT_SUPPORT)
+	if config.Driver != poetgres {
+		return nil, errors.New(doesNotSupport)
 	}
 
-	connectionString := fmt.Sprintf(CONNECTION_GAE_TEMPLATE,
+	connectionString := fmt.Sprintf(connectionGAETemplate,
 		config.Host, config.DBName, config.Username, config.Password,
 	)
 
 	if !config.EnableSSL {
-		connectionString += CONNECTION_NO_SSL
+		connectionString += connectionNoSSL
 	}
 
 	// Makes connection
-	connection, err := sqlx.Open(POSTGRES, connectionString)
+	connection, err := sqlx.Open(poetgres, connectionString)
 	if err != nil {
 		return nil, err
 	}
@@ -80,17 +82,17 @@ func NewGAE(config DBConfig) (Database, error) {
 	return &PsqlDB{connection}, nil
 }
 
-// Selects one item. result in "out" (casted)
+// SelectOne selects one item. result in "out" (casted)
 func (d *PsqlDB) SelectOne(out interface{}, sql string, args ...interface{}) error {
 	return d.connection.Get(out, sql, args...)
 }
 
-// Selects several items. result in "out" (casted)
+// SelectMany selects several items. result in "out" (casted)
 func (d *PsqlDB) SelectMany(out interface{}, sql string, args ...interface{}) error {
 	return d.connection.Select(out, sql, args...)
 }
 
-// Executes "SELECT <x> WHERE <y> in (...)", result in "out" (casted)
+// SelectIn executes "SELECT <x> WHERE <y> in (...)", result in "out" (casted)
 func (d *PsqlDB) SelectIn(out interface{}, sql string, args ...interface{}) error {
 	query, args, err := sqlx.In(sql, args...)
 	if err != nil {
@@ -100,7 +102,7 @@ func (d *PsqlDB) SelectIn(out interface{}, sql string, args ...interface{}) erro
 	return d.connection.Select(out, query, args...)
 }
 
-// Executes "SELECT <x> WHERE <y> in (...)", result will be returned as sql rows
+// QueryIn executes "SELECT <x> WHERE <y> in (...)", result will be returned as sql rows
 func (d *PsqlDB) QueryIn(sql string, args ...interface{}) (*sql.Rows, error) {
 	query, args, err := sqlx.In(sql, args...)
 	if err != nil {
@@ -110,12 +112,12 @@ func (d *PsqlDB) QueryIn(sql string, args ...interface{}) (*sql.Rows, error) {
 	return d.connection.Query(query, args...)
 }
 
-// Executes query, usually non return values
+// Exec executes query, usually non return values
 func (d *PsqlDB) Exec(sql string, args ...interface{}) (sql.Result, error) {
 	return d.connection.Exec(sql, args...)
 }
 
-// Executes query, usually have return values as sql rows
+// ExecReturning executes query, usually have return values as sql rows
 func (d *PsqlDB) ExecReturning(sql string, args ...interface{}) (*sql.Rows, error) {
 	return d.connection.Query(sql, args...)
 }

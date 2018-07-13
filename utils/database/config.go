@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 )
 
-// Defines basic db config model
+// DBConfig defines basic db config model
 type DBConfig struct {
 	Driver             string `json:"driver"`
 	Host               string `json:"host"`
@@ -18,7 +18,7 @@ type DBConfig struct {
 	MaxOpenConnections int    `json:"max_open_connections"`
 }
 
-// Defines method to read config file
+// ReadConfig defines method to read config file
 func ReadConfig(path string) (*DBConfig, error) {
 	raw, err := ioutil.ReadFile(path)
 	if err != nil {

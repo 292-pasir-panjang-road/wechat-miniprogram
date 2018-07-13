@@ -24,10 +24,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	app.InitApp(*dbConfig, *serverConfig)
+	err = app.InitApp(*dbConfig, *serverConfig)
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
 	app.Run()
 	app.Logger.Log(
-		application.LOG_LAYER_TAG, application.LAYER_APPLICATION,
-		application.LOG_MESSAGE_TAG, application.MESSAGE_HALTING,
-		application.LOG_ERROR_TAG, <-app.Errs)
+		application.LogLayerTag, application.LayerApplication,
+		application.LogMessageTag, application.MessageHalting,
+		application.LogErrorTag, <-app.Errs)
 }

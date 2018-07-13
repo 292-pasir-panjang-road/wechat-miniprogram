@@ -1,6 +1,7 @@
 package user
 
-type UserAccount struct {
-	id        int    `db:"id"`
-	wechat_id string `db:"w_id"`
+// Account wraps user table from db
+type Account struct {
+	ID       int    `db:"id"`
+	WechatID string `db:"w_id"`
 }

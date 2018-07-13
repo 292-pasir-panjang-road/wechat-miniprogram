@@ -1,4 +1,4 @@
-package serviceModels
+package servicemodels
 
 type GroupMembersRetrieveParams struct {
 	GroupID int

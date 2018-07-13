@@ -7,6 +7,7 @@ import (
 	recordServiceModels "wechat-miniprogram/services/detailInfo/serviceModels"
 )
 
+// GenerateDetailBetweenUsers Generates the detailed info between two user
 func GenerateDetailBetweenUsers(records []*recordStoreModels.RecordRetrieveResult, hostID string, guestID string) (*recordServiceModels.DetailBetweenUsers, error) {
 	userRecords := make([]*recordServiceModels.UserRecord, 0)
 	for _, record := range records {
@@ -27,13 +28,18 @@ func GenerateDetailBetweenUsers(records []*recordStoreModels.RecordRetrieveResul
 		}
 		userRecords = append(userRecords, &userRecord)
 	}
-	return &recordServiceModels.DetailBetweenUsers{hostID, guestID, userRecords}, nil
+	return &recordServiceModels.DetailBetweenUsers{
+		HostID:  hostID,
+		GuestID: guestID,
+		Records: userRecords}, nil
 }
 
+// GenerateGroupDetails Generates the detailed info for a group
 func GenerateGroupDetails(records []*recordStoreModels.RecordRetrieveResult) (*recordServiceModels.GroupDetails, error) {
 	return nil, nil
 }
 
+// ObjToString converts a golang struct to string (json format)
 func ObjToString(object interface{}) string {
 	objBytes, _ := json.Marshal(object)
 	return string(objBytes)

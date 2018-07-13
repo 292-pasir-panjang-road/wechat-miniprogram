@@ -1,10 +1,10 @@
 package application
 
 import (
-	"os"
 	"context"
 	"encoding/json"
 	"net/http"
+	"os"
 
 	gokitLog "github.com/go-kit/kit/log"
 	gokitHttp "github.com/go-kit/kit/transport/http"
@@ -22,30 +22,45 @@ import (
 	recordStore "wechat-miniprogram/datastore/record"
 	detailInfoService "wechat-miniprogram/services/detailInfo"
 	detailInfoHttp "wechat-miniprogram/services/detailInfo/transports/http"
-	// userStore       "wechat-miniprogram/datastore/user"
 )
 
 const (
-	LOG_TIMESTAMP_TAG = "timestamp"
-	LOG_CALLER_TAG    = "caller"
-	LOG_LAYER_TAG     = "layer"
-	LOG_ROUTE_TAG     = "route"
-	LOG_MESSAGE_TAG   = "message"
-	LOG_ERROR_TAG			= "error"
+	// LogTimestampTag is the tag for timestamp log
+	LogTimestampTag = "timestamp"
+	// LogCallerTag is the tag for caller log
+	LogCallerTag = "caller"
+	// LogLayerTag is the tag for layer log
+	LogLayerTag = "layer"
+	// LogRouteTag is the tag for route log
+	LogRouteTag = "route"
+	// LogMessageTag is the tag for message log
+	LogMessageTag = "message"
+	// LogErrorTag is the tag for error log
+	LogErrorTag = "error"
 
-	LAYER_APPLICATION = "application"
-	LAYER_ENDPOINT    = "endpoint"
-	LAYER_TRANSPORT   = "transport"
+	// LayerApplication represents application layer
+	LayerApplication = "application"
+	// LayerEndpoint represents endpoint layer
+	LayerEndpoint = "endpoint"
+	// LayerTransport represents transport layer
+	LayerTransport = "transport"
 
-	HTTP_HEADER_CONTENT = "Content-Type"
-	HTTP_CONTENT_JSON   = "application/json"
-	HTTP_CONTENT_UTF8   = "charset=utf-8"
-	HTTP_HEADER_BREAK   = ";"
+	// HTTPHeaderConetent is for http content type header
+	HTTPHeaderConetent = "Content-Type"
+	// HTTPContentJSON represents json conetent type
+	HTTPContentJSON = "application/json"
+	// HTTPContentUTF8 represents utf-8 conetent type
+	HTTPContentUTF8 = "charset=utf-8"
+	// HTTPHeaderBreak breaks in http header
+	HTTPHeaderBreak = ";"
 
-	MESSAGE_LISTEN_ADDR = "http listening on "
-	MESSAGE_HALTING     = "halting!"
+	// MessageListenAddress represents message for logging listen address
+	MessageListenAddress = "http listening on "
+	// MessageHalting represents message for halting
+	MessageHalting = "halting!"
 )
 
+// App is a struct containing basic app configs
 type App struct {
 	Router          *mux.Router
 	Logger          gokitLog.Logger
@@ -58,6 +73,7 @@ type App struct {
 	Errs            chan error
 }
 
+// InitApp inits app configs
 func (a *App) InitApp(dbConfig database.DBConfig, serverConfig server.ServerConfig) error {
 	a.Router = mux.NewRouter()
 	a.ServerConfig = serverConfig
@@ -75,12 +91,12 @@ func (a *App) InitApp(dbConfig database.DBConfig, serverConfig server.ServerConf
 func (a *App) initLoggers() {
 	baseLogger := gokitLog.NewLogfmtLogger(gokitLog.NewSyncWriter(os.Stderr))
 	a.Logger = gokitLog.With(baseLogger,
-		LOG_TIMESTAMP_TAG, gokitLog.DefaultTimestampUTC,
-		LOG_CALLER_TAG, gokitLog.DefaultCaller,
+		LogTimestampTag, gokitLog.DefaultTimestampUTC,
+		LogCallerTag, gokitLog.DefaultCaller,
 	)
-	a.AppLogger = gokitLog.With(a.Logger, LOG_LAYER_TAG, LAYER_APPLICATION)
-	a.EndpointLogger = gokitLog.With(a.Logger, LOG_LAYER_TAG, LAYER_ENDPOINT)
-	a.TransportLogger = gokitLog.With(a.Logger, LOG_LAYER_TAG, LAYER_TRANSPORT)
+	a.AppLogger = gokitLog.With(a.Logger, LogLayerTag, LayerApplication)
+	a.EndpointLogger = gokitLog.With(a.Logger, LogLayerTag, LayerEndpoint)
+	a.TransportLogger = gokitLog.With(a.Logger, LogLayerTag, LayerTransport)
 }
 
 func (a *App) initDB(dbConfig database.DBConfig) error {
@@ -105,9 +121,10 @@ func (a *App) initDetailInfoHandler() {
 		detailInfoHttp.DecodeRetrieveRequest,
 		encodeJSONResponse,
 		a.ErrorEncoder,
-		gokitHttp.ServerErrorLogger(gokitLog.With(a.TransportLogger, LOG_ROUTE_TAG, "Retrieve"))))
+		gokitHttp.ServerErrorLogger(gokitLog.With(a.TransportLogger, LogRouteTag, "retrieve"))))
 }
 
+// Run starts the app server
 func (a *App) Run() {
 	go func() {
 		a.initHeartbeat()
@@ -117,13 +134,13 @@ func (a *App) Run() {
 			Handler: a.Router,
 			Addr:    address,
 		}
-		a.Logger.Log(LOG_LAYER_TAG, LAYER_APPLICATION, LOG_MESSAGE_TAG, MESSAGE_LISTEN_ADDR+address)
+		a.Logger.Log(LogLayerTag, LayerApplication, LogMessageTag, MessageListenAddress+address)
 		a.Errs <- srv.ListenAndServe()
 	}()
 }
 
 func errorHandler(_ context.Context, err error, w http.ResponseWriter) {
-	w.Header().Set(HTTP_HEADER_CONTENT, HTTP_CONTENT_JSON+HTTP_HEADER_BREAK+HTTP_CONTENT_UTF8)
+	w.Header().Set(HTTPHeaderConetent, HTTPContentJSON+HTTPHeaderBreak+HTTPContentUTF8)
 	var response responses.ErrorResponse
 
 	switch {
@@ -142,6 +159,6 @@ func errorHandler(_ context.Context, err error, w http.ResponseWriter) {
 }
 
 func encodeJSONResponse(_ context.Context, writer http.ResponseWriter, response interface{}) error {
-	writer.Header().Set(HTTP_HEADER_CONTENT, HTTP_CONTENT_JSON+HTTP_HEADER_BREAK+HTTP_CONTENT_UTF8)
+	writer.Header().Set(HTTPHeaderConetent, HTTPContentJSON+HTTPHeaderBreak+HTTPContentUTF8)
 	return json.NewEncoder(writer).Encode(response)
 }

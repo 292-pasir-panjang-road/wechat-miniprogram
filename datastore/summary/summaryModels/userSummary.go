@@ -1,1 +1,1 @@
-package summaryModels
+package summarymodels
